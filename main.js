@@ -1,121 +1,99 @@
+const API = "https://api.thedogapi.com/v1";
+// const apiURLFavorites =
+//   "https://api.thedogapi.com/v1/favourites?api_key=afb6850b-d377-4279-972b-a895e04bc14f";
+const error = document.getElementById("error");
 
-const apiURLRandom= 'https://api.thedogapi.com/v1/images/search?limit=4'
-const apiURLFavorites= 'https://api.thedogapi.com/v1/favourites'
-const error= document.getElementById('error')
-const apiURLFavoritesDelete= id => `https://api.thedogapi.com/v1/favourites/${id}`
+const loadRandomDogs = async () => {
+  try {
+    const images = await fetch(`${API}/images/search?limit=4`, {
+      headers: {
+        "x-api-key": "afb6850b-d377-4279-972b-a895e04bc14f",
+      },
+    });
+    const data = await images.json();
+    console.log(data);
+    const img = document.getElementById("randomDogs");
+    let view = `
+    ${data
+      .map(
+        (data) =>
+          `
+        <img src="${data.url}" id="img1" width="200" height="200" alt="random dog picture" class="image">
+        <button onclick="postFavoriteDogs('${data.id}')" type="button" class="fav-button" id="btn1">Save as fav</button>
+      `
+      )
+      .join("")}
+    `;
+    img.innerHTML = view;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+loadRandomDogs();
 
-const loadRandomDogs= async (api) => {
-    const images= await fetch(api)
-    const data= await images.json()
+const loadFavoriteDogs = async () => {
+  try {
+    const images = await fetch(`${API}/favourites`, {
+      headers: {
+        "x-api-key": "afb6850b-d377-4279-972b-a895e04bc14f",
+      },
+    });
+    const data = await images.json();
+    const favorite = document.getElementById("favoriteDogs");
+    console.log(data);
+    const view = `
+    ${data
+      .map(
+        (data) => `
+    <article>
+      <img
+          width="200"
+          height="200"
+          alt="random dog picture"
+          class="image"
+          src="${data.image.url}"
+      />
+      <button onclick="deleteFavoriteDogs(${data.id})">Take out of fav</button>
+    </article>
+    `
+      )
+      .join("")}
+    `;
+    favorite.innerHTML = view;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+loadFavoriteDogs();
 
-    if (images.status !== 200) {
-        error.innerHTML= 'Error loading images: ' + images.message 
-    } else {
-        const img1= document.getElementById('img1')
-        const img2= document.getElementById('img2')
-        const img3= document.getElementById('img3')
-        const img4= document.getElementById('img4')
+const postFavoriteDogs = async (id) => {
+  try {
+    await fetch(`${API}/favourites/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": "afb6850b-d377-4279-972b-a895e04bc14f",
+      },
+      body: JSON.stringify({
+        image_id: id,
+      }),
+    });
+    loadFavoriteDogs();
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
-        img1.src= data[0].url
-        img2.src= data[1].url
-        img3.src= data[2].url
-        img4.src= data[3].url
-        
-        btn1= document.getElementById('btn1')
-        btn2= document.getElementById('btn2')
-        btn3= document.getElementById('btn3')
-        btn4= document.getElementById('btn4')
-
-        btn1.onclick= () => postFavoriteDogs(data[0].id)
-        btn2.onclick= () => postFavoriteDogs(data[1].id)
-        btn3.onclick= () => postFavoriteDogs(data[2].id)
-        btn4.onclick= () => postFavoriteDogs(data[3].id)
-
-
-        }
-}
-
-const loadFavoriteDogs= async (api) => {
-    const images= await fetch(api, {
-        method: 'GET',
-        headers: {
-            'x-api-key': 'afb6850b-d377-4279-972b-a895e04bc14f',
-            'Content-Type': 'application/json',
-        },
-    })
-    const data= await images.json()
-
-    console.log('Favorites: ', data)
-    if (images.status !== 200) {
-        error.innerHTML= 'Error loading images: ' + images.message
-    } else {
-        
-        const section= document.getElementById('favoriteDogs')
-        section.innerHTML= ""
-        const h2= document.createElement('h2')
-        const h2text= document.createElement('FavoriteDogs')
-        h2.appendChild(h2text)
-        section.appendChild(h2)
-
-        data.forEach(element => {
-            const article= document.createElement('article')
-            const img= document.createElement('img')
-            const btn= document.createElement('button')
-            const btnText= document.createTextNode('Take out the dog from favorites')
-
-            img.src= element.image.url
-            img.width= '150'
-            btn.appendChild(btnText)
-            btn.onclick= () => deleteFavoriteDogs(element.id)
-
-            article.appendChild(img)
-            article.appendChild(btn)
-            section.appendChild(article)
-
-        })
-    }
-}
-
-const postFavoriteDogs= async (id) => {
-    const images= await fetch(apiURLFavorites, {
-        method: 'POST',
-        headers: {
-            'x-api-key': 'afb6850b-d377-4279-972b-a895e04bc14f',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            image_id: id
-        }),
-    })
-    const data= await images.json()
-    if (images.status !== 200) {
-        error.innerHTML= 'Error loading images: ' + images.message
-    } else {
-        console.log('Dog saved')
-        loadFavoriteDogs(apiURLFavorites) 
-    }
-}
-
-const deleteFavoriteDogs= async (id) => {
-    const images= await fetch(apiURLFavoritesDelete(id), {
-        method: 'DELETE',
-        headers: {
-            'x-api-key': 'afb6850b-d377-4279-972b-a895e04bc14f',
-            'Content-Type': 'application/json',
-        },
-    })
-    const data= await images.json()
-    if (images.status !== 200) {
-        error.innerHTML= 'Error loading images: ' + images.message
-    } else {
-        console.log('Dog deleted')
-        loadFavoriteDogs(apiURLFavorites)
-    }
-}
-
-loadRandomDogs(apiURLRandom)
-loadFavoriteDogs(apiURLFavorites)
-
-const reloader= () => {
-    loadRandomDogs(apiURLRandom)
-}
+const deleteFavoriteDogs = async (favourite_id) => {
+  try {
+    await fetch(`${API}/favourites/${favourite_id}`, {
+      method: "DELETE",
+      headers: {
+        "x-api-key": "afb6850b-d377-4279-972b-a895e04bc14f",
+      },
+    });
+    loadFavoriteDogs();
+  } catch (error) {
+    throw new Error(error);
+  }
+};
