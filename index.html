@@ -1,56 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Square+Peg&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Square+Peg&display=swap"
+      rel="stylesheet"
+    />
+    <script defer src="./main.js"></script>
     <title>Random dogs</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>Random dogs</h1>
-        <span id="error" ></span>
+      <h1>Random dogs</h1>
+      <span id="error"></span>
     </header>
     <h2>Do you like them?</h2>
     <section class="container">
-        
-        <div class="button-dog-container">
-        <img id="img1" width="200" height="200" alt="random dog picture" class="image">
-        <button type="button" class="fav-button" id="btn1">Save as fav</button>
-        </div>
-        
-        <div class="button-dog-container">
-        <img id="img2" width="200" height="200" alt="random dog picture" class="image">
-        <button type="button" class="fav-button" id="btn2">Save as fav</button>
-        </div> 
-
-        <div class="button-dog-container">
-        <img id="img3" width="200" height="200" alt="random dog picture" class="image">
-        <button type="button" class="fav-button" id="btn3">Save as fav</button>
-        </div>
-        
-        <div class="button-dog-container">
-        <img id="img4" width="200" height="200" alt="random dog picture" class="image">
-        <button type="button" class="fav-button" id="btn4">Save as fav</button>
-        </div>
-        
-        <div class="button-container">
-        <button type="button" onclick="reloader()" class="random-dog-button"> New dogs!</button>
-        </div>
+      <div id="randomDogs" class="button-dog-container"></div>
     </section>
 
-    <section id="favoriteDogs">
-        <h2>Favorite dogs</h2>
-        <article>
-            <img id="img1" width="200" height="200" alt="random dog picture" class="image">
-            <button>Take out of fav</button>
-        </article>
+    <section>
+      <h2>Favorite dogs</h2>
+      <article id="favoriteDogs"></article>
     </section>
-    
-    <script src="./main.js"></script>
-</body>
+  </body>
 </html>
