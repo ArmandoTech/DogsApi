@@ -1,7 +1,8 @@
 
-const apiURLRandom= 'https://api.thedogapi.com/v1/images/search?limit=4&api_key=afb6850b-d377-4279-972b-a895e04bc14fRapiURLRandom'
-const apiURLFavorites= 'https://api.thedogapi.com/v1/favourites?api_key=afb6850b-d377-4279-972b-a895e04bc14f'
+const apiURLRandom= 'https://api.thedogapi.com/v1/images/search?limit=4'
+const apiURLFavorites= 'https://api.thedogapi.com/v1/favourites'
 const error= document.getElementById('error')
+const apiURLFavoritesDelete= id => `https://api.thedogapi.com/v1/favourites/${id}`
 
 const loadRandomDogs= async (api) => {
     const images= await fetch(api)
@@ -35,23 +36,37 @@ const loadRandomDogs= async (api) => {
 }
 
 const loadFavoriteDogs= async (api) => {
-    const images= await fetch(api)
+    const images= await fetch(api, {
+        method: 'GET',
+        headers: {
+            'x-api-key': 'afb6850b-d377-4279-972b-a895e04bc14f',
+            'Content-Type': 'application/json',
+        },
+    })
     const data= await images.json()
 
     console.log('Favorites: ', data)
     if (images.status !== 200) {
         error.innerHTML= 'Error loading images: ' + images.message
     } else {
+        
+        const section= document.getElementById('favoriteDogs')
+        section.innerHTML= ""
+        const h2= document.createElement('h2')
+        const h2text= document.createElement('FavoriteDogs')
+        h2.appendChild(h2text)
+        section.appendChild(h2)
+
         data.forEach(element => {
-            const section= document.getElementById('favoriteDogs')
             const article= document.createElement('article')
             const img= document.createElement('img')
             const btn= document.createElement('button')
             const btnText= document.createTextNode('Take out the dog from favorites')
 
-            btn.appendChild(btnText)
             img.src= element.image.url
             img.width= '150'
+            btn.appendChild(btnText)
+            btn.onclick= () => deleteFavoriteDogs(element.id)
 
             article.appendChild(img)
             article.appendChild(btn)
@@ -65,6 +80,7 @@ const postFavoriteDogs= async (id) => {
     const images= await fetch(apiURLFavorites, {
         method: 'POST',
         headers: {
+            'x-api-key': 'afb6850b-d377-4279-972b-a895e04bc14f',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -74,6 +90,26 @@ const postFavoriteDogs= async (id) => {
     const data= await images.json()
     if (images.status !== 200) {
         error.innerHTML= 'Error loading images: ' + images.message
+    } else {
+        console.log('Dog saved')
+        loadFavoriteDogs(apiURLFavorites) 
+    }
+}
+
+const deleteFavoriteDogs= async (id) => {
+    const images= await fetch(apiURLFavoritesDelete(id), {
+        method: 'DELETE',
+        headers: {
+            'x-api-key': 'afb6850b-d377-4279-972b-a895e04bc14f',
+            'Content-Type': 'application/json',
+        },
+    })
+    const data= await images.json()
+    if (images.status !== 200) {
+        error.innerHTML= 'Error loading images: ' + images.message
+    } else {
+        console.log('Dog deleted')
+        loadFavoriteDogs(apiURLFavorites)
     }
 }
 
