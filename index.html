@@ -13,18 +13,44 @@
 <body>
     <header>
         <h1>Random dogs</h1>
+        <span id="error" ></span>
     </header>
+    <h2>Do you like them?</h2>
     <section class="container">
-        <img id="img1" width="250" height="250" alt="dog random Picture" class="image">
-        <img id="img2" width="250" height="250" alt="dog random Picture" class="image">
-        <img id="img3" width="250" height="250" alt="dog random Picture" class="image">
-        <img id="img4" width="250" height="250" alt="dog random Picture" class="image">
+        
+        <div class="button-dog-container">
+        <img id="img1" width="200" height="200" alt="random dog picture" class="image">
+        <button type="button" class="fav-button" id="btn1">Save as fav</button>
+        </div>
+        
+        <div class="button-dog-container">
+        <img id="img2" width="200" height="200" alt="random dog picture" class="image">
+        <button type="button" class="fav-button" id="btn2">Save as fav</button>
+        </div> 
 
+        <div class="button-dog-container">
+        <img id="img3" width="200" height="200" alt="random dog picture" class="image">
+        <button type="button" class="fav-button" id="btn3">Save as fav</button>
+        </div>
+        
+        <div class="button-dog-container">
+        <img id="img4" width="200" height="200" alt="random dog picture" class="image">
+        <button type="button" class="fav-button" id="btn4">Save as fav</button>
+        </div>
+        
         <div class="button-container">
         <button type="button" onclick="reloader()" class="random-dog-button"> New dogs!</button>
         </div>
     </section>
 
+    <section id="favoriteDogs">
+        <h2>Favorite dogs</h2>
+        <article>
+            <img id="img1" width="200" height="200" alt="random dog picture" class="image">
+            <button>Take out of fav</button>
+        </article>
+    </section>
+    
     <script src="./main.js"></script>
 </body>
 </html>
